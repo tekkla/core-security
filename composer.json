@@ -1,11 +1,50 @@
 {
-  "name" : "security",
-  "require" : {
-    "psr/log" : "1.0.0",
-    "tekkla/core-data" : ">=0.0.2"
-  },
-  "repositories" : [ {
-    "type" : "composer",
-    "url" : "https://packagist.org/"
-  } ]
+    "name": "tekkla/core-security",
+    "description": "WIP Small suite of security reletated libs for userhandling, hashgeneration, banchecks, token generators and some other more or less usefull things.",
+    "require":
+    {
+        "php": "7.0.0",
+        "psr/log": "1.0.0",
+        "tekkla/core-data": ">=0.0.2"
+    },
+
+    "repositories":
+    [
+        {
+            "type": "composer",
+            "url": "https://packagist.org/"
+        }
+    ],
+
+    "license": "MIT",
+    "keywords":
+    [
+        "core",
+        "security",
+        "hash",
+        "user",
+        "login",
+        "activation",
+        "ban",
+        "password"
+    ],
+
+    "autoload":
+    {
+        "psr-0":
+        {
+            "Core\\Security": ""
+        }
+    },
+
+    "type": "library",
+    "homepage": "https://github.com/tekkla/core-security",
+    "authors":
+    [
+        {
+            "name": "Michael Zorn",
+            "email": "tekkla@tekkla.de",
+            "role": "Developer"
+        }
+    ]
 }
