@@ -1,0 +1,145 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "d0cba46800a708cdb9c662d0af16efe7",
+    "content-hash": "87a752ea126ba58275f40c28101637c0",
+    "packages": [
+        {
+            "name": "psr/log",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/log.git",
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Psr\\Log\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for logging libraries",
+            "keywords": [
+                "log",
+                "psr",
+                "psr-3"
+            ],
+            "time": "2012-12-21 11:40:51"
+        },
+        {
+            "name": "tekkla/core-data",
+            "version": "0.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tekkla/core-data.git",
+                "reference": "5957036a824ce6388ce0a90671c9cef413c23765"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tekkla/core-data/zipball/5957036a824ce6388ce0a90671c9cef413c23765",
+                "reference": "5957036a824ce6388ce0a90671c9cef413c23765",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0",
+                "tekkla/core-toolbox": ">=0.0.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Core\\Data": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Zorn",
+                    "email": "tekkla@tekkla.de",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Abstraction layer to query databases via PDO.",
+            "homepage": "https://github.com/tekkla/core-data",
+            "keywords": [
+                "OOP",
+                "abstraction",
+                "pdo"
+            ],
+            "time": "2016-06-27 00:05:31"
+        },
+        {
+            "name": "tekkla/core-toolbox",
+            "version": "0.0.6.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tekkla/core-toolbox.git",
+                "reference": "cf2e67e7dca087551fd510d397d06a8b5e17409e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tekkla/core-toolbox/zipball/cf2e67e7dca087551fd510d397d06a8b5e17409e",
+                "reference": "cf2e67e7dca087551fd510d397d06a8b5e17409e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0",
+                "psr/log": "1.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Core\\Toolbox": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Zorn",
+                    "email": "tekkla@tekkla.de",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Toolbox of classes and function to check variables, manipulate arrays, do file actions and much more. It's a collection of tools that get used in some of my core libs.",
+            "homepage": "https://github.com/Tekkla/core-toolbox",
+            "keywords": [
+                "Toolbox",
+                "core",
+                "functions"
+            ],
+            "time": "2016-06-30 22:05:51"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

@@ -1,0 +1,11 @@
+{
+  "name" : "security",
+  "require" : {
+    "psr/log" : "1.0.0",
+    "tekkla/core-data" : ">=0.0.2"
+  },
+  "repositories" : [ {
+    "type" : "composer",
+    "url" : "https://packagist.org/"
+  } ]
+}
