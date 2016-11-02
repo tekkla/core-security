@@ -77,11 +77,11 @@ class UserHandler extends AbstractSecurity
         $username = $user->getUsername();
 
         if ($username == 'guest') {
-            Throw new UserException('Cannot create user without username.', 'user.username.missing');
+            Throw new UserException('Cannot create user without username.');
         }
 
         if (empty($user->getPassword())) {
-            Throw new UserException('Cannot create user without a password', 'user.password.missing');
+            Throw new UserException('Cannot create user without a password');
         }
 
         // Check for already existing username
@@ -90,7 +90,7 @@ class UserHandler extends AbstractSecurity
         ]);
 
         if ($exists > 0) {
-            Throw new UserException(sprintf('The username "%s" is already in use.', $username), 'user.username.exists');
+            Throw new UserException(sprintf('The username "%s" is already in use.', $username));
         }
 
         try {
@@ -227,11 +227,11 @@ class UserHandler extends AbstractSecurity
     public function changePassword(User $user)
     {
         if ($user->getUsername() == 'guest') {
-            Throw new UserException('Cannot change password of a guest.', 'user.password.guest');
+            Throw new UserException('Cannot change password of a guest.');
         }
 
         if (empty($user->getPassword())) {
-            Throw new UserException('Cannot change an empty password', 'user.password.missing');
+            Throw new UserException('Cannot change an empty password');
         }
 
         $hashgen = new HashGenerator($user->getPassword());
@@ -265,7 +265,7 @@ class UserHandler extends AbstractSecurity
     public function updateUser(User $user, bool $refresh_password = false)
     {
         if ($user->getUsername() == 'guest') {
-            Throw new UserException('Cannot change password of a guest.', 'user.password.guest');
+            Throw new UserException('Cannot change password of a guest.');
         }
 
         // Check the old password
@@ -293,7 +293,7 @@ class UserHandler extends AbstractSecurity
     public function deleteUser(User $user)
     {
         if ($user->getUsername() == 'guest') {
-            Throw new UserException('Cannot delete a guest user.', 'user.delete.guest');
+            Throw new UserException('Cannot delete a guest user.');
         }
 
         // Check the old password
