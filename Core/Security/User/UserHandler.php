@@ -132,8 +132,6 @@ class UserHandler extends AbstractSecurity
      * Takes care about not to load a user more than once
      *
      * @param User $user
-     *
-     * @param boolean $force
      */
     public function loadUser(User $user)
     {
@@ -222,7 +220,7 @@ class UserHandler extends AbstractSecurity
      *
      * @param User $user
      *
-     * @return void
+     * @throws UserException
      */
     public function changePassword(User $user)
     {
@@ -260,7 +258,7 @@ class UserHandler extends AbstractSecurity
      * @param bool $refresh_password
      *            Optional flag to force a refresh aka rehash of the given password
      *
-     * @throws UserException::
+     * @throws UserException
      */
     public function updateUser(User $user, bool $refresh_password = false)
     {
