@@ -226,7 +226,7 @@ class UserHandler extends AbstractSecurity
      */
     public function changePassword(User $user)
     {
-        if ($user->getUsername() == 'guest') {
+        if ($user->isGuest()) {
             Throw new UserException('Cannot change password of a guest.');
         }
 
@@ -264,7 +264,7 @@ class UserHandler extends AbstractSecurity
      */
     public function updateUser(User $user, bool $refresh_password = false)
     {
-        if ($user->getUsername() == 'guest') {
+        if ($user->isGuest()) {
             Throw new UserException('Cannot change password of a guest.');
         }
 
@@ -292,7 +292,7 @@ class UserHandler extends AbstractSecurity
      */
     public function deleteUser(User $user)
     {
-        if ($user->getUsername() == 'guest') {
+        if ($user->isGuest()) {
             Throw new UserException('Cannot delete a guest user.');
         }
 
