@@ -48,17 +48,24 @@ class User
     private $password = '';
 
     /**
+     * Access on users groups
      *
      * @var UserGroups
      */
     public $groups;
 
     /**
+     * Permissions grouped by app
      *
      * @var array
      */
     public $permissions = [];
 
+    /**
+     * Constructor
+     *
+     * @param int $id
+     */
     public function __construct(int $id = 0)
     {
         if (!empty($id)) {
@@ -78,6 +85,11 @@ class User
         return empty($this->id);
     }
 
+    /**
+     * Flags this user as global admin
+     *
+     * @param bool $admin
+     */
     public function setAdmin(bool $admin)
     {
         $this->admin = $admin;
