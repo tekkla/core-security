@@ -306,11 +306,10 @@ class AuthToken extends AbstractDbToken
 
             if (isset($this->logger)) {
                 $this->logger->warning($msg, __METHOD__);
-                return;
             }
-            else {
-                Throw new TokenException($msg);
-            }
+
+            Throw new TokenException($msg);
+
         }
 
         return $selector . ':' . $token;
