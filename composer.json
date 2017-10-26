@@ -9,6 +9,10 @@
 	"repositories" : [{
 			"type" : "composer",
 			"url" : "https://packagist.org/"
+		}, {
+			"type" : "git",
+			"url" : "https://github.com/tekkla/core-data.git",
+			"name" : "Data"
 		}
 	],
 	"license" : "MIT",
