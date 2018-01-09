@@ -12,7 +12,7 @@ use Core\Data\Connectors\Db\Db;
  */
 class AuthToken extends AbstractDbToken
 {
-
+    
     use RemoveExpiredTokensTrait;
 
     /**
@@ -70,13 +70,15 @@ class AuthToken extends AbstractDbToken
     private $expires_timestamp;
 
     /**
+     * Constructor
      *
-     * @param unknown $db
+     * @param Db $db
+     *            Necessary Db object to store auth token in database
      */
-    public function __construct($db)
+    public function __construct(Db $db)
     {
         parent::__construct($db);
-
+        
         $this->setExpires($this->expires_days);
     }
 
@@ -114,7 +116,7 @@ class AuthToken extends AbstractDbToken
         if (empty($selector)) {
             Throw new TokenException('Empty selectors are not allowed.');
         }
-
+        
         $this->selector = $selector;
     }
 
@@ -131,7 +133,7 @@ class AuthToken extends AbstractDbToken
             $this->setSize($this->selector_size);
             $this->selector = $this->generateRandomToken();
         }
-
+        
         return $this->selector;
     }
 
@@ -147,7 +149,7 @@ class AuthToken extends AbstractDbToken
         if (empty($selector)) {
             Throw new TokenException('Empty tokens are not allowed.');
         }
-
+        
         $this->token = $token;
     }
 
@@ -164,7 +166,7 @@ class AuthToken extends AbstractDbToken
             $this->setSize($this->token_size);
             $this->token = $this->generateRandomToken();
         }
-
+        
         return $this->token;
     }
 
@@ -180,7 +182,7 @@ class AuthToken extends AbstractDbToken
         if ($selector_size < $this->selector_size_min) {
             Throw new TokenException(sprintf('Minimum size of selector in AuthToken is %d', $this->selector_size_min));
         }
-
+        
         $this->selector_size = $selector_size;
     }
 
@@ -206,7 +208,7 @@ class AuthToken extends AbstractDbToken
         if ($token_size < $this->token_size_min) {
             Throw new TokenException(sprintf('Minimum size of token in AuthToken is %d', $this->token_size_min));
         }
-
+        
         $this->token_size = $token_size;
     }
 
@@ -228,9 +230,9 @@ class AuthToken extends AbstractDbToken
     public function setExpires(int $days)
     {
         $this->expires_days = $days;
-
+        
         $time = strtotime('+ ' . $this->expires_days . ' days');
-
+        
         $this->expires_datetime = date('Y-m-d H:i:s', $time);
         $this->expires_timestamp = $time;
     }
@@ -275,17 +277,17 @@ class AuthToken extends AbstractDbToken
     public function generate(): string
     {
         $this->removeExpiredTokens();
-
+        
         if (empty($this->id)) {
             Throw new TokenException('Cannot create AuthToken for empty id.');
         }
-
+        
         // Create selector
         $selector = bin2hex($this->getSelector());
-
+        
         // Create token
         $token = hash('sha256', $this->getToken());
-
+        
         // Store selector and tokenb in DB
         $this->db->qb([
             'table' => 'core_auth_tokens',
@@ -298,20 +300,19 @@ class AuthToken extends AbstractDbToken
                 'expires' => $this->expires_datetime
             ]
         ], true);
-
+        
         // Set autologin token cookie only when token is stored successfully in db!!!
         if (empty($this->db->lastInsertId())) {
-
+            
             $msg = 'AuthToken could not be stored in database.';
-
+            
             if (isset($this->logger)) {
                 $this->logger->warning($msg, __METHOD__);
             }
-
+            
             Throw new TokenException($msg);
-
         }
-
+        
         return $selector . ':' . $token;
     }
 
@@ -323,20 +324,19 @@ class AuthToken extends AbstractDbToken
     public function deleteUserToken()
     {
         $this->removeExpiredTokens();
-
+        
         if (empty($this->id)) {
-
+            
             $msg = '%s: Can not delete auth tokens without a corresponding id. Use AuthToken::setId() to set an id before calling this method. Deletion of auth token aborted!';
-
+            
             if (isset($this->logger)) {
                 $this->logger->warning($msg, __METHOD__);
                 return;
-            }
-            else {
+            } else {
                 Throw new TokenException($msg);
             }
         }
-
+        
         // Yep! Delete token and return false for failed autologin
         $this->db->qb([
             'table' => 'core_auth_tokens',

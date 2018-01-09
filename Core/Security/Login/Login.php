@@ -7,7 +7,7 @@ use Core\Security\Ban\BanLogEntry;
  * Login.php
  *
  * @author Michael "Tekkla" Zorn <tekkla@tekkla.de>
- * @copyright 2016
+ * @copyright 2016-2018
  * @license MIT
  */
 class Login extends AbstractLogin
@@ -127,7 +127,7 @@ class Login extends AbstractLogin
 
     /**
      *
-     * @param boolean $remember
+     * @param bool $remember
      */
     public function setRemember(bool $remember)
     {
@@ -167,14 +167,7 @@ class Login extends AbstractLogin
      * Validates the provided data against user data to perform user login.
      * Offers option to activate autologin.
      *
-     * @param unknown $login
-     *            Login name
-     * @param unknown $password
-     *            Password to validate
-     * @param boolean $remember_me
-     *            Option to activate autologin
-     *
-     * @return boolean|mixed
+     * @return bool|mixed
      */
     public function doLogin()
     {
@@ -292,7 +285,7 @@ class Login extends AbstractLogin
      * Logs out the user, removes all it's data from session, creates a new session token, removes all autologin cookies
      * and logs the logout to the log table.
      *
-     * @return boolean
+     * @return bool
      */
     public function doLogout(): bool
     {
@@ -330,7 +323,7 @@ class Login extends AbstractLogin
     /**
      * Returns login state of current user
      *
-     * @return boolean
+     * @return bool
      */
     public function loggedIn()
     {
@@ -340,7 +333,7 @@ class Login extends AbstractLogin
     /**
      * Checks login state and overrides the router current data to force display of loginform.
      *
-     * @return boolean
+     * @return bool
      */
     public function forceLogin(): bool
     {
@@ -360,11 +353,11 @@ class Login extends AbstractLogin
     /**
      * Logs login process
      *
-     * @param boolean $error_username
+     * @param bool $error_username
      *            Flag to signal that there was a problem with the username
-     * @param boolean $error_password
+     * @param bool $error_password
      *            Flag to signal that there was a problem with the password
-     * @param boolean $ban
+     * @param bool $ban
      *            Flag to signal that this is a banable action
      */
     private function logLogin(bool $error_username = false, bool $error_password = false, bool $ban = true)

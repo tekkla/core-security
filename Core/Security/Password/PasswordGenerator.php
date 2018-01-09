@@ -5,7 +5,7 @@ namespace Core\Security\Password;
  * PasswordGenerator.php
  *
  * @author Michael "Tekkla" Zorn <tekkla@tekkla.de>
- * @copyright 2016
+ * @copyright 2016-2018
  * @license MIT
  *
  * This class combines two ideas for randowm password generation from GistHub and Paragon Initiative
@@ -32,7 +32,7 @@ class PasswordGenerator
      *
      * @var string
      */
-    private $password = '';
+    private $password;
 
     /**
      *
@@ -77,7 +77,7 @@ class PasswordGenerator
     /**
      * Selects the charactersets to use in password generation
      *
-     * @param unknown $charsets_to_use
+     * @param string $charsets_to_use
      *            The following sets are possible:
      *
      *            l = lowercase chars (Default: abcdefghjkmnpqrstuvwxyz)
@@ -174,7 +174,7 @@ class PasswordGenerator
      *
      * @return string
      */
-    public function generate()
+    public function generate(): string
     {
         $alphabet = '';
 

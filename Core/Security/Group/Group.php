@@ -88,7 +88,7 @@ class Group
 
     /**
      *
-     * @throws DatabaseException
+     * @throws GroupException
      */
     public function saveGroups()
     {
@@ -171,7 +171,7 @@ class Group
      * @param integer $id_group
      *
      *
-     * @throws DatabaseException
+     * @throws GroupException
      */
     public function removeGroup($id_group)
     {

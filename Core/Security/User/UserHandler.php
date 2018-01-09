@@ -2,8 +2,6 @@
 namespace Core\Security\User;
 
 use Core\Data\Connectors\Db\Db;
-use Core\Security\User\User;
-use Core\Security\User\UserException;
 use Core\Security\Password\HashGenerator;
 use Core\Security\AbstractSecurity;
 use Core\Security\Token\ActivationToken;
@@ -12,7 +10,7 @@ use Core\Security\Token\ActivationToken;
  * UserHandler.php
  *
  * @author Michael "Tekkla" Zorn <tekkla@tekkla.de>
- * @copyright 2016
+ * @copyright 2016-2018
  * @license MIT
  */
 class UserHandler extends AbstractSecurity
