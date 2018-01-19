@@ -5,6 +5,7 @@ use Core\Data\Connectors\Db\Db;
 use Core\Security\Password\HashGenerator;
 use Core\Security\AbstractSecurity;
 use Core\Security\Token\ActivationToken;
+use Core\Toolbox\Strings\CamelCase;
 
 /**
  * UserHandler.php
@@ -65,7 +66,7 @@ class UserHandler extends AbstractSecurity
      *            User object to create user for
      * @param boolean $state
      *            Set to true if user should be autoactivated
-     *
+     *            
      * @throws UserException
      *
      * @return integer
@@ -73,26 +74,26 @@ class UserHandler extends AbstractSecurity
     public function createUser(User $user): int
     {
         $username = $user->getUsername();
-
+        
         if ($username == 'guest') {
             Throw new UserException('Cannot create user without username.');
         }
-
+        
         if (empty($user->getPassword())) {
             Throw new UserException('Cannot create user without a password');
         }
-
+        
         // Check for already existing username
         $exists = $this->db->count($this->table, 'username=:username', [
             ':username' => $username
         ]);
-
+        
         if ($exists > 0) {
             Throw new UserException(sprintf('The username "%s" is already in use.', $username));
         }
-
+        
         try {
-
+            
             $this->db->beginTransaction();
             $this->db->qb([
                 'table' => $this->table,
@@ -102,25 +103,24 @@ class UserHandler extends AbstractSecurity
                     'state' => $user->getState()
                 ]
             ], true);
-
+            
             // Get our new user id
             $id = $this->db->lastInsertId();
-
-            if (!empty($id)) {
-
+            
+            if (! empty($id)) {
+                
                 // Set new id to users object
                 $user->setId($id);
-
+                
                 // Create password hash
                 $this->changePassword($user);
-
+                
                 $this->db->endTransaction();
             }
-        }
-        catch (\Throwable $t) {
+        } catch (\Throwable $t) {
             Throw new UserException($t->getMessage(), $t->getCode());
         }
-
+        
         return $id;
     }
 
@@ -137,7 +137,7 @@ class UserHandler extends AbstractSecurity
         if ($user->isGuest()) {
             return;
         }
-
+        
         $this->db->qb([
             'table' => $this->table,
             'field' => [
@@ -150,16 +150,16 @@ class UserHandler extends AbstractSecurity
                 ':id_user' => $user->getId()
             ]
         ]);
-
+        
         $data = $this->db->single();
-
-        if (!empty($data)) {
-
+        
+        if (! empty($data)) {
+            
             $user->setUsername($data['username']);
-
+            
             // Use username as display_name when there is no display_name for this user
             $user->setDisplayName(empty($data['display_name']) ? $data['username'] : $data['display_name']);
-
+            
             // Load the groups the user is in
             $this->db->qb([
                 'table' => 'core_users_groups',
@@ -169,16 +169,16 @@ class UserHandler extends AbstractSecurity
                     ':id_user' => $user->getId()
                 ]
             ]);
-
+            
             $groups = $this->db->column();
-
-            if (!empty($groups)) {
-
+            
+            if (! empty($groups)) {
+                
                 $user->groups->set($groups);
-
+                
                 // Create a prepared string and param array to use in query
                 $prepared = $this->db->prepareArrayQuery('group', $groups);
-
+                
                 // Get and return the permissions
                 $this->db->qb([
                     'table' => 'core_groups_permissions',
@@ -190,20 +190,20 @@ class UserHandler extends AbstractSecurity
                     'filter' => 'id_group IN (' . $prepared['sql'] . ')',
                     'params' => $prepared['values']
                 ]);
-
+                
                 $permissions = $this->db->all();
-
+                
+                $temp_perms = [];
+                
+                $string = new CamelCase('');
+                
                 foreach ($permissions as $perm) {
-
-                    if (!array_key_exists($perm['storage'], $user->permissions)) {
-                        $user->permissions[$perm['storage']] = new UserPermissions();
-                    }
-
-                    $user->permissions[$perm['storage']]->add($perm['permission']);
+                    $string->setString($perm['storage']);
+                    $user->permissions->add($string->uncamelize() . '.' . $perm['permission']);
                 }
-
+                
                 // Is the user an admin?
-                if (!empty($user->permissions['Core']->allowedTo('admin'))) {
+                if (! empty($user->permissions->allowedTo('core.admin'))) {
                     $user->setAdmin(true);
                 }
             }
@@ -225,15 +225,15 @@ class UserHandler extends AbstractSecurity
         if ($user->isGuest()) {
             Throw new UserException('Cannot change password of a guest.');
         }
-
+        
         if (empty($user->getPassword())) {
             Throw new UserException('Cannot change an empty password');
         }
-
+        
         $hashgen = new HashGenerator($user->getPassword());
         $hashgen->setSalt($this->salt);
         $password = $hashgen->generate();
-
+        
         // Check the old password
         $this->db->qb([
             'table' => $this->table,
@@ -245,7 +245,7 @@ class UserHandler extends AbstractSecurity
                 ':password' => $password
             ]
         ], true);
-
+        
         $user->setPassword($password);
     }
 
@@ -255,7 +255,7 @@ class UserHandler extends AbstractSecurity
      * @param User $user
      * @param bool $refresh_password
      *            Optional flag to force a refresh aka rehash of the given password
-     *
+     *            
      * @throws UserException
      */
     public function updateUser(User $user, bool $refresh_password = false)
@@ -263,7 +263,7 @@ class UserHandler extends AbstractSecurity
         if ($user->isGuest()) {
             Throw new UserException('Cannot change password of a guest.');
         }
-
+        
         // Check the old password
         $this->db->qb([
             'table' => $this->table,
@@ -275,7 +275,7 @@ class UserHandler extends AbstractSecurity
                 'id_user' => $user->getId()
             ]
         ], true);
-
+        
         if ($refresh_password) {
             $this->changePassword($user);
         }
@@ -291,7 +291,7 @@ class UserHandler extends AbstractSecurity
         if ($user->isGuest()) {
             Throw new UserException('Cannot delete a guest user.');
         }
-
+        
         // Check the old password
         $this->db->delete($this->table, 'id_user=:id_user', [
             ':id_user' => $user->getId()
@@ -307,24 +307,24 @@ class UserHandler extends AbstractSecurity
      */
     public function denyActivation(string $key): bool
     {
-
+        
         // Get tokendate from db
         $tokenhandler = new ActivationToken($this->db);
         $tokenhandler->setSelectorTokenString($key);
         $tokenhandler->loadTokenData();
-
+        
         // Get tokendate from db
         $id_user = $tokenhandler->getUserId();
-
+        
         // Nothings to do when already removed
         if (empty($id_user)) {
             return false;
         }
-
+        
         // Remove the user and the token
         $this->deleteUser(new User($id_user));
         $tokenhandler->deleteActivationToken();
-
+        
         return true;
     }
 
@@ -336,33 +336,33 @@ class UserHandler extends AbstractSecurity
      */
     public function activateUser(string $key)
     {
-
+        
         // Get tokendate from db
         $tokenhandler = new ActivationToken($this->db);
         $tokenhandler->setSelectorTokenString($key);
-
+        
         // Store the current to extracted from selector:token string ($key)
         $token_from_key = $tokenhandler->getActivationToken();
-
+        
         // Load the tokendata by using the selector from selector:token string ($key)
         $tokenhandler->loadTokenData();
-
+        
         // Get user id
         $id_user = $tokenhandler->getUserId();
-
+        
         // No user id means the activation must fail
         if (empty($id_user)) {
             return false;
         }
-
+        
         // Get the token loaded from db via selector from selector:token string ($key)
         $token_from_db = $tokenhandler->getActivationToken();
-
+        
         // Matching hashes?
-        if (!hash_equals($token_from_key, $token_from_db)) {
+        if (! hash_equals($token_from_key, $token_from_db)) {
             return false;
         }
-
+        
         // Activate user
         $this->db->qb([
             'table' => $this->table,
@@ -374,10 +374,10 @@ class UserHandler extends AbstractSecurity
                 ':id_user' => $id_user
             ]
         ], true);
-
+        
         // and delete the token of this user
         $tokenhandler->deleteActivationToken();
-
+        
         // And finally return user id
         return $id_user;
     }

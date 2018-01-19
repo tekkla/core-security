@@ -5,7 +5,7 @@ namespace Core\Security\User;
  * User.php
  *
  * @author Michael "Tekkla" Zorn <tekkla@tekkla.de>
- * @copyright 2016
+ * @copyright 2016-2018
  * @license MIT
  */
 class User
@@ -57,9 +57,9 @@ class User
     /**
      * Permissions grouped by app
      *
-     * @var array
+     * @var UserPermissions
      */
-    public $permissions = [];
+    public $permissions;
 
     /**
      * Constructor
@@ -68,11 +68,12 @@ class User
      */
     public function __construct(int $id = 0)
     {
-        if (!empty($id)) {
+        if (! empty($id)) {
             $this->id = $id;
         }
-
+        
         $this->groups = new UserGroups();
+        $this->permissions = new UserPermissions();
     }
 
     /*
@@ -95,9 +96,24 @@ class User
         $this->admin = $admin;
     }
 
+    /**
+     * Returns admin flag of the user
+     *
+     * @return bool
+     */
     public function getAdmin(): bool
     {
         return $this->admin;
+    }
+
+    /**
+     * Synonym for getAdmin() method
+     *
+     * @return boolean
+     */
+    public function isAdmin(): bool
+    {
+        return $this->getAdmin();
     }
 
     /**
@@ -127,7 +143,7 @@ class User
         if (empty($username)) {
             Throw new UserException('An empty username is not allowed.');
         }
-
+        
         $this->username = $username;
     }
 
@@ -161,10 +177,10 @@ class User
      */
     public function getDisplayname(): string
     {
-        if (!isset($this->display_name)) {
+        if (! isset($this->display_name)) {
             return $this->username ?? 'guest';
         }
-
+        
         return $this->display_name;
     }
 
@@ -205,7 +221,7 @@ class User
         if ($state < 0 || $state > 2) {
             Throw new UserException('Users state value can be 0 (active), 1 (awaits activation by mail) or 2 (awaits activation by admin)');
         }
-
+        
         $this->state = $state;
     }
 
@@ -221,39 +237,5 @@ class User
     public function getState(): int
     {
         return $this->state;
-    }
-
-    /**
-     * Checks user access by permissions
-     *
-     * @param array $permissions
-     * @param bool $force
-     *
-     * @return bool
-     */
-    public function checkAccess(array $permissions = [], bool $force = false): bool
-    {
-        // Guests are not allowed by default
-        if ($this->isGuest()) {
-            return false;
-        }
-
-        // Allow access to all users when permissions argument is empty
-        if (empty($permissions)) {
-            return true;
-        }
-
-        // Administrators are supermen :P
-        if ($this->isAdmin()) {
-            return true;
-        }
-
-        // User has the right to do this?
-        if (count(array_intersect($permissions, $this->perissions)) > 0) {
-            return true;
-        }
-
-        // You aren't allowed, by default.
-        return false;
     }
 }

@@ -58,22 +58,18 @@ abstract class AbstractUserPermissions implements UserPermissionsInterface
      */
     public function allowedTo($permission): bool
     {
-
         if (empty($this->permissions)) {
             return true;
         }
-
-        if (!is_array($permission)) {
+        
+        if (! is_array($permission)) {
             $permission = (array) $permission;
         }
-
-        foreach ($permission as $perm) {
-            if (in_array($perm, $this->permissions)) {
-                return true;
-            }
+        
+        if (count(array_intersect($permission, $this->permissions)) > 0) {
+            return true;
         }
-
+        
         return false;
     }
 }
-
