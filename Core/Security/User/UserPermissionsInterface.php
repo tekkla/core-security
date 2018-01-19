@@ -5,12 +5,56 @@ namespace Core\Security\User;
  * UserPermissionsInterface.php
  *
  * @author Michael "Tekkla" Zorn <tekkla@tekkla.de>
- * @copyright 2016
+ * @copyright 2016-2018
  * @license MIT
  */
 interface UserPermissionsInterface
 {
 
+    /*
+     * Checks the user for to be a guest. 
+     * 
+     * Is true by default until the user logs in.
+     *
+     * @return bool
+     */
+    public function isGuest(): bool;
+
+    /**
+     * Flags this user as guest
+     *
+     * @param bool $guest
+     */
+    public function setGuest(bool $guest);
+    
+    /**
+     * Returns admin flag of the user
+     *
+     * @return bool
+     */
+    public function getGuest(): bool;
+    
+    /**
+     * Flags this user as global admin
+     *
+     * @param bool $admin
+     */
+    public function setAdmin(bool $admin);
+    
+    /**
+     * Returns admin flag of the user
+     *
+     * @return bool
+     */
+    public function getAdmin(): bool;
+    
+    /**
+     * Synonym for getAdmin() method
+     *
+     * @return boolean
+     */
+    public function isAdmin(): bool;
+    
     /**
      * Adds a permission to the permissions stack
      *

@@ -68,52 +68,15 @@ class User
      */
     public function __construct(int $id = 0)
     {
-        if (! empty($id)) {
-            $this->id = $id;
-        }
-        
+
         $this->groups = new UserGroups();
         $this->permissions = new UserPermissions();
-    }
+        
+        if (! empty($id)) {
+            $this->id = $id;
+            $this->permissions->setGuest(false);
+        }
 
-    /*
-     * Checks the user for to be a guest. Is true when user is not logged in.
-     *
-     * @return boolean
-     */
-    public function isGuest(): bool
-    {
-        return empty($this->id);
-    }
-
-    /**
-     * Flags this user as global admin
-     *
-     * @param bool $admin
-     */
-    public function setAdmin(bool $admin)
-    {
-        $this->admin = $admin;
-    }
-
-    /**
-     * Returns admin flag of the user
-     *
-     * @return bool
-     */
-    public function getAdmin(): bool
-    {
-        return $this->admin;
-    }
-
-    /**
-     * Synonym for getAdmin() method
-     *
-     * @return boolean
-     */
-    public function isAdmin(): bool
-    {
-        return $this->getAdmin();
     }
 
     /**
@@ -124,6 +87,8 @@ class User
     public function setId(int $id)
     {
         $this->id = $id;
+        
+        $this->permissions->setGuest(false);
     }
 
     /**

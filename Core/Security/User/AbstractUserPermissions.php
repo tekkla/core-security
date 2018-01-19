@@ -13,9 +13,81 @@ abstract class AbstractUserPermissions implements UserPermissionsInterface
 
     /**
      *
+     * @var bool
+     */
+    protected $guest = true;
+
+    /**
+     *
+     * @var bool
+     */
+    protected $admin = false;
+
+    /**
+     *
      * @var array
      */
     protected $permissions = [];
+
+    /**
+     *
+     * {@inheritdoc}
+     * @see \Core\Security\User\UserPermissionsInterface::getAdmin()
+     */
+    public function getAdmin(): bool
+    {
+        return $this->admin;
+    }
+
+    /**
+     *
+     * {@inheritdoc}
+     * @see \Core\Security\User\UserPermissionsInterface::getGuest()
+     */
+    public function getGuest(): bool
+    {
+        return $this->guest;
+    }
+
+    /**
+     *
+     * {@inheritdoc}
+     * @see \Core\Security\User\UserPermissionsInterface::isAdmin()
+     */
+    public function isAdmin(): bool
+    {
+        return $this->admin;
+    }
+
+    /**
+     *
+     * {@inheritdoc}
+     * @see \Core\Security\User\UserPermissionsInterface::isGuest()
+     */
+    public function isGuest(): bool
+    {
+        return $this->guest;
+    }
+
+    /**
+     *
+     * {@inheritdoc}
+     * @see \Core\Security\User\UserPermissionsInterface::setAdmin()
+     */
+    public function setAdmin(bool $admin)
+    {
+        $this->admin = $admin;
+    }
+
+    /**
+     *
+     * {@inheritdoc}
+     * @see \Core\Security\User\UserPermissionsInterface::setGuest()
+     */
+    public function setGuest(bool $guest)
+    {
+        $this->guest = $guest;
+    }
 
     /**
      *
@@ -58,6 +130,14 @@ abstract class AbstractUserPermissions implements UserPermissionsInterface
      */
     public function allowedTo($permission): bool
     {
+        if ($this->isGuest()) {
+            return false;
+        }
+        
+        if ($this->isAdmin()) {
+            return true;
+        }
+        
         if (empty($this->permissions)) {
             return true;
         }

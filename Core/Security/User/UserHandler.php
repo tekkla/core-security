@@ -134,7 +134,7 @@ class UserHandler extends AbstractSecurity
     public function loadUser(User $user)
     {
         // Guests do not have a user id. So do not try to load data for guests.
-        if ($user->isGuest()) {
+        if ($user->permissions->isGuest()) {
             return;
         }
         
@@ -204,7 +204,7 @@ class UserHandler extends AbstractSecurity
                 
                 // Is the user an admin?
                 if (! empty($user->permissions->allowedTo('core.admin'))) {
-                    $user->setAdmin(true);
+                    $user->permissions->setAdmin(true);
                 }
             }
         }
@@ -222,7 +222,7 @@ class UserHandler extends AbstractSecurity
      */
     public function changePassword(User $user)
     {
-        if ($user->isGuest()) {
+        if ($user->permissions->isGuest()) {
             Throw new UserException('Cannot change password of a guest.');
         }
         
@@ -260,7 +260,7 @@ class UserHandler extends AbstractSecurity
      */
     public function updateUser(User $user, bool $refresh_password = false)
     {
-        if ($user->isGuest()) {
+        if ($user->permissions->isGuest()) {
             Throw new UserException('Cannot change password of a guest.');
         }
         
@@ -288,7 +288,7 @@ class UserHandler extends AbstractSecurity
      */
     public function deleteUser(User $user)
     {
-        if ($user->isGuest()) {
+        if ($user->permission->isGuest()) {
             Throw new UserException('Cannot delete a guest user.');
         }
         
