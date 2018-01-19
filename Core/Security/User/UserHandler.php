@@ -193,8 +193,6 @@ class UserHandler extends AbstractSecurity
                 
                 $permissions = $this->db->all();
                 
-                $temp_perms = [];
-                
                 $string = new CamelCase('');
                 
                 foreach ($permissions as $perm) {
